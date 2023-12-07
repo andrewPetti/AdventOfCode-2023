@@ -23,7 +23,7 @@ class Day01Test {
 
     @Test
     void partB_expectCorrectResult() {
-        final Integer expected = 45000;
-        assertEquals(expected, _subject.partB("day01Sample.txt"));
+        final int expected = 281;
+        assertEquals(expected, _subject.partB("day01Sample02.txt"));
     }
 }
