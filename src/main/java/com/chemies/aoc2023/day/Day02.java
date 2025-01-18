@@ -7,8 +7,8 @@ import com.chemies.aoc2023.util.TextFormatter;
 import com.diogonunes.jcolor.Attribute;
 import com.google.common.collect.ImmutableList;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.OptionalInt;
 
 public class Day02 implements Day {
     private final FileHelper _fileHelper = new FileHelper();
@@ -62,7 +62,7 @@ ImmutableList.Builder<ImmutableList<CubeSamples>> games = new ImmutableList.Buil
             final ImmutableList<String> draws = Arrays.stream(game.split(";"))
                     .collect(ImmutableList.toImmutableList());
             ImmutableList.Builder<CubeSamples> samples = new ImmutableList.Builder<>();
-            draws.stream().forEach(draw -> {
+            draws.forEach(draw -> {
                 final ImmutableList<String> sample = Arrays.stream(draw.split(",")).
                         collect(ImmutableList.toImmutableList());
 
@@ -89,8 +89,21 @@ ImmutableList.Builder<ImmutableList<CubeSamples>> games = new ImmutableList.Buil
     public int partB(final String filename) {
         final ImmutableList<String> stringList = _fileHelper.fileToStringList(filename);
 
-        return 0;
+        final ImmutableList<ImmutableList<CubeSamples>> games = getGames(stringList);
 
+        int sum = games.stream().mapToInt(this::getMinimumPower).sum();
+        //games.forEach(game -> getMinimumPower(game)).sum();
+        return sum;
+
+    }
+
+    private int getMinimumPower(ImmutableList<CubeSamples> game) {
+        int min = 0;
+        OptionalInt maxBlue = game.stream().mapToInt(x -> x.blue).max();
+        OptionalInt maxRed = game.stream().mapToInt(x -> x.red).max();
+        OptionalInt maxGreen = game.stream().mapToInt(x -> x.green).max();
+
+        return maxBlue.getAsInt() * maxRed.getAsInt() * maxGreen.getAsInt();
     }
 
     @Override
