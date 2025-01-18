@@ -4,7 +4,6 @@ package com.chemies.aoc2023.util;
 import com.google.common.collect.ImmutableList;
 
 import java.io.*;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
