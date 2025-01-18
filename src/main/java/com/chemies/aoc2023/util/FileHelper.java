@@ -3,17 +3,15 @@ package com.chemies.aoc2023.util;
 
 import com.google.common.collect.ImmutableList;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 
 @SuppressWarnings("unused")
 public class FileHelper {
 
-    public static final String DATA_PATH = "D:\\Git\\AdventOfCode-2023\\src\\main\\java\\com\\chemies\\AoC2023\\data\\";
+    public static final String DATA_FOLDER = "\\src\\main\\java\\com\\chemies\\aoc2023\\data\\";
 
     public ImmutableList<String> fileToStringList(final String filename) {
         final ArrayList<String> list = new ArrayList<>();
@@ -145,8 +143,10 @@ public class FileHelper {
     private BufferedReader getReader(final String filename) throws FileNotFoundException {
         final BufferedReader reader;
         try {
+            String filePath = new File("").getAbsolutePath();
+
             reader =
-                    new BufferedReader(new FileReader(DATA_PATH + filename));
+                    new BufferedReader(new FileReader(filePath+ DATA_FOLDER + filename));
 
         } catch (final FileNotFoundException e) {
             e.printStackTrace();
