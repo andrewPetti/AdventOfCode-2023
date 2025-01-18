@@ -8,7 +8,7 @@ public class DayFactory {
             case 1:
                 return new Day01();
             case 2:
-                //return new Day02();
+                return new Day02();
             case 3:
                 //return new Day03();
             case 4:

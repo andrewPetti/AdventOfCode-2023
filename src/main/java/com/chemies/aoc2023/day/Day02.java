@@ -16,41 +16,59 @@ public class Day02 implements Day {
 
     @Override
     public void executePartA() {
-        final int result = partA("day01Input.txt");
+        final int result = partA("day02Input.txt");
         System.out.println("Part A answer: " + _textFormatter.format(result, Attribute.GREEN_TEXT()));
     }
 
     @Override
     public void executePartB() {
-        final int result = partB("day01Input.txt");
+        final int result = partB("day02Input.txt");
         System.out.println("Part B answer: " + _textFormatter.format(result, Attribute.GREEN_TEXT()));
     }
 
     public int partA(final String filename) {
         final ImmutableList<String> stringList = _fileHelper.fileToStringList(filename);
 
-        final ImmutableList<ImmutableList<String>> games = getGames(stringList);
+        final ImmutableList<ImmutableList<CubeSamples>> games = getGames(stringList);
 
-        return 0;
+        int sum = 0;
+        for (int i = 1; i<=games.size(); i++){
+            if(validGame(games.get(i-1))){
+                sum += i;
+            }
+
+        }
+
+        return sum;
     }
 
-    private ImmutableList<ImmutableList<String>> getGames(final ImmutableList<String> stringList) {
-        final ArrayList<ImmutableList<String>> games = new ArrayList<>();
+    private boolean validGame(ImmutableList<CubeSamples> cubeSamples) {
+        for(CubeSamples sample : cubeSamples){
+            if ( sample.blue > 14 || sample.red > 12 || sample.green > 13 ){
+                return false;
+            }
+        }
 
+        return true;
+    }
+
+    private ImmutableList<ImmutableList<CubeSamples>> getGames(final ImmutableList<String> stringList) {
+        //final ArrayList<ArrayList<CubeSamples>> games = new ArrayList<>();
+ImmutableList.Builder<ImmutableList<CubeSamples>> games = new ImmutableList.Builder<>();
         // final cubeSamples cube1 = cubeSamples.builder().blue(5).red(3).build();
 
         stringList.forEach(line -> {
             final String game = line.split(":")[1];
             final ImmutableList<String> draws = Arrays.stream(game.split(";"))
                     .collect(ImmutableList.toImmutableList());
-
+            ImmutableList.Builder<CubeSamples> samples = new ImmutableList.Builder<>();
             draws.stream().forEach(draw -> {
                 final ImmutableList<String> sample = Arrays.stream(draw.split(",")).
                         collect(ImmutableList.toImmutableList());
 
                 final CubeSamplesBuilder builder = CubeSamples.builder();
                 sample.forEach(cube -> {
-                    final String[] values = cube.split(" ");
+                    final String[] values = cube.trim().split(" ");
 
                     if (values[1].equals("blue")) {
                         builder.blue(Integer.parseInt(values[0]));
@@ -60,10 +78,12 @@ public class Day02 implements Day {
                         builder.green(Integer.parseInt(values[0]));
                     }
                 });
+                    samples.add(builder.build());
             });
+            games.add(samples.build());
         });
 
-        return ImmutableList.copyOf(games);
+        return games.build();
     }
 
     public int partB(final String filename) {
