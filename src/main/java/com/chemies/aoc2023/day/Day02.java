@@ -91,14 +91,11 @@ ImmutableList.Builder<ImmutableList<CubeSamples>> games = new ImmutableList.Buil
 
         final ImmutableList<ImmutableList<CubeSamples>> games = getGames(stringList);
 
-        int sum = games.stream().mapToInt(this::getMinimumPower).sum();
-        //games.forEach(game -> getMinimumPower(game)).sum();
-        return sum;
+        return games.stream().mapToInt(this::getMinimumPower).sum();
 
     }
 
     private int getMinimumPower(ImmutableList<CubeSamples> game) {
-        int min = 0;
         OptionalInt maxBlue = game.stream().mapToInt(x -> x.blue).max();
         OptionalInt maxRed = game.stream().mapToInt(x -> x.red).max();
         OptionalInt maxGreen = game.stream().mapToInt(x -> x.green).max();
