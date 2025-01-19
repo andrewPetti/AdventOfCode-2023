@@ -12,7 +12,7 @@ public class DayFactory {
             case 3:
                 //return new Day03();
             case 4:
-               // return new Day04();
+                return new Day04();
             case 5:
                 //return new Day05();
             case 8:
