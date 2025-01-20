@@ -6,8 +6,6 @@ import com.diogonunes.jcolor.Attribute;
 import com.google.common.collect.ImmutableList;
 
 import java.util.Arrays;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class Day04 implements Day {
     private final FileHelper _fileHelper = new FileHelper();
@@ -26,7 +24,6 @@ public class Day04 implements Day {
         ImmutableList<Card> cards = buildCards(fileLines);
 
         return cards.stream().mapToInt(this::getCardValue).sum();
-//        return 0;
     }
 
     private ImmutableList<Card> buildCards(ImmutableList<String> fileLines) {
@@ -56,8 +53,10 @@ public class Day04 implements Day {
         String[] data = line.split(":");
 
         String[] numbers = data[1].split("\\|");
+        String[] cardNumber = data[0].replaceAll("\\s{2,}"," ").split(" ");
 
         return Card.builder()
+                .cardNumber(Integer.parseInt(cardNumber[1].replace("\\s{2,"," ").trim()))
                 .winningNumbers(getNumbers(numbers[0]))
                 .cardNumbers(getNumbers(numbers[1])).build();
     }
@@ -75,8 +74,37 @@ public class Day04 implements Day {
 
     }
 
-    private int partB(String file) {
-        return 0;
+    int partB(String filename) {
+        ImmutableList<String> fileLines = _fileHelper.fileToStringList(filename);
+        ImmutableList<Card> cards = buildCards(fileLines);
+
+        int[] results = new int[cards.size()];
+
+        cards.forEach(card -> {
+                    int wins = getNumberOfWins(card);
+                    int pos = card.cardNumber - 1;
+                    results[pos]++;
+                    if (wins > 0) {
+                        for (int x = pos + 1; x <= pos + wins; x++) {
+                            if (x < cards.size()) {
+                                results[x] += results[pos];
+                            }
+                        }
+                    }
+                }
+        );
+
+        return Arrays.stream(results).sum();
+    }
+
+    private int getNumberOfWins(Card card) {
+        return card.cardNumbers.stream().mapToInt(x -> {
+            if (card.winningNumbers.contains(x)) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }).sum();
     }
 
     @Override

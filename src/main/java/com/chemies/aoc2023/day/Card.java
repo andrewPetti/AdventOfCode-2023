@@ -6,6 +6,7 @@ import lombok.Builder;
 @Builder
 public class Card {
 
+    Integer cardNumber;
     ImmutableList<Integer> winningNumbers;
     ImmutableList<Integer> cardNumbers;
 
