@@ -16,7 +16,7 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.8.1'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
     implementation("com.diogonunes:JColor:5.5.1")
-    implementation("com.google.guava:guava:31.1-jre")
+    implementation('com.google.guava:guava:32.0.1-android')
     implementation("org.javatuples:javatuples:1.2")
 
     compileOnly 'org.projectlombok:lombok:1.18.30'
