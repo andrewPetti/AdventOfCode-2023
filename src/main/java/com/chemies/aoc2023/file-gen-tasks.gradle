@@ -1,3 +1,5 @@
+package com.chemies.aoc2023
+
 import groovy.swing.SwingBuilder
 
 import javax.swing.*
