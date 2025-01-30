@@ -1,0 +1,133 @@
+import groovy.swing.SwingBuilder
+
+import javax.swing.*
+import javax.swing.border.EmptyBorder
+import java.awt.*
+import java.awt.event.ActionEvent
+import java.awt.event.KeyEvent
+
+class FileGeneration {
+
+    static String getInputFromUser(title, inputLabel = title, defaultInputValue = "") {
+        def inputValue = ''
+        def dialogResult = null
+        def cancelCondition = JComponent.WHEN_IN_FOCUSED_WINDOW
+        def confirmButtonText = 'OK'
+        def cancelButtonText = 'Cancel'
+        def escapeKeyStroke = KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0)
+        new SwingBuilder().edt {
+            dialog(modal: true,
+                    title: title,
+                    alwaysOnTop: true,
+                    resizable: false,
+                    locationRelativeTo: null,
+                    pack: true,
+                    show: true) {
+                vbox(null) {
+                    def margin = 4
+                    def editorPanel = panel(border: new EmptyBorder(margin, margin, 8, margin)) {
+                        boxLayout(axis: BoxLayout.Y_AXIS)
+                        label(text: inputLabel + ":")
+                        input = textField(text: defaultInputValue)
+                    }
+                    editorPanel.registerKeyboardAction({ ActionEvent e -> dispose() }, escapeKeyStroke, cancelCondition)
+                    editorPanel
+                    panel(null) {
+                        flowLayout(alignment: FlowLayout.RIGHT)
+
+                        button(defaultButton: true,
+                                text: confirmButtonText,
+                                actionPerformed: {
+                                    inputValue = input.text
+                                    dialogResult = confirmButtonText
+                                    dispose()
+                                })
+                        button(text: cancelButtonText, actionPerformed: { dispose() })
+                    }
+                }
+            }
+        }
+        if (dialogResult != confirmButtonText) {
+            throw new BuildCancelledException()
+        }
+        return inputValue
+    }
+
+    static void getDayClass(day, fileName) {
+        println(day)
+        File f = new File(fileName)
+
+        f.append('package com.chemies.aoc2023.day;')
+        f.append('\n ')
+        f.append('\nimport com.chemies.aoc2023.util.FileHelper;')
+        f.append('\nimport com.chemies.aoc2023.util.TextFormatter;')
+        f.append('\nimport com.diogonunes.jcolor.Attribute;')
+        f.append('\n ')
+        f.append('public class ' + day + ' implements Day { ')
+        f.append('\n    private final FileHelper _fileHelper = new FileHelper();')
+        f.append('\n    private final TextFormatter _textFormatter = new TextFormatter();')
+        f.append('\n    @Override')
+        f.append('\n    public void executePartA() {')
+        f.append('\n       final int result = partA("' + day + 'Input.txt");')
+        f.append('\n       System.out.println("Part A answer: " + _textFormatter.format(result, Attribute.GREEN_TEXT()));')
+        f.append('\n    }')
+
+        f.append('\n    int partA(String filename) {')
+        f.append('\n        return 0;')
+        f.append('\n    }')
+
+
+        f.append('\n    @Override')
+        f.append('\n    public void executePartB() {')
+        f.append('\n        final int result = partB("' + day + 'Input.txt");')
+        f.append('\n        System.out.println("Part B answer: " + _textFormatter.format(result, Attribute.GREEN_TEXT()));')
+        f.append('\n    }')
+
+        f.append('\n    int partB(String filename) {')
+        f.append('\n        return 0;')
+        f.append('\n    }')
+
+        f.append('\n    @Override')
+        f.append('\n    public String getName() {')
+        f.append('\n        return "' + day + '";')
+        f.append('\n    }')
+
+        f.append('\n    @Override')
+        f.append('\n    public boolean canExecute() {')
+        f.append('\n        return true;')
+        f.append('\n    }')
+
+        //close class
+        f.append('\n}')
+    }
+}
+
+def dataDir = '/src/main/java/com/chemies/aoc2023/data/'
+def srcDir = '/src/main/java/com/chemies/aoc2023/day/'
+
+tasks.register('inputFile') {
+    group("create inputs")
+    doLast {
+        def day = FileGeneration.getInputFromUser("Enter the Day number you want:")
+
+        new File("$rootDir" + dataDir + day + "Input.txt").text = ""
+    }
+}
+tasks.register('sampleFile') {
+    group("create inputs")
+    doLast {
+        def day = FileGeneration.getInputFromUser("Enter the Day number you want:")
+
+        new File("$rootDir" + dataDir + day + "Sample.txt").text = ""
+    }
+}
+
+tasks.register('dayClass') {
+    group("create class")
+    doLast {
+        def day = FileGeneration.getInputFromUser("Enter the Day number you want:")
+
+        //new File("$rootDir"+srcDir+ day.capitalize() + ".java").text =
+        FileGeneration.getDayClass(day.capitalize(), "$rootDir" + srcDir + day.capitalize() + ".java")
+    }
+}
