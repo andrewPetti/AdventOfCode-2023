@@ -28,4 +28,4 @@ test {
     useJUnitPlatform()
 }
 
-//apply from: "file-gen-tasks.gradle"
+apply from: "src/main/java/com/chemies/aoc2023/file-gen-tasks.gradle"
