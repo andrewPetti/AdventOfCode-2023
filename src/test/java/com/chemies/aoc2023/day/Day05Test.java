@@ -21,7 +21,7 @@ class Day05Test {
 
     @Test
     void partB_expectCorrectResult() {
-        final int expected = 30;
+        final int expected = 46;
         assertEquals(expected, _subject.partB("day05Sample.txt"));
     }
 }

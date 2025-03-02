@@ -28,15 +28,23 @@ public class Day05 implements Day {
                 .map(Long::parseLong)
                 .collect(ImmutableList.toImmutableList());
 
+        ImmutableList<ImmutableList<AlmanacMap>> almanacMaps = buildAlmanacMaps(groups);
+
+        OptionalLong min = findMinimum(seeds, almanacMaps);
+        return min.getAsLong();
+    }
+
+    private OptionalLong findMinimum(ImmutableList<Long> seeds, ImmutableList<ImmutableList<AlmanacMap>> almanacMaps) {
+        return seeds.stream().mapToLong(seed -> findFinalLocation(seed, almanacMaps)).min();
+    }
+
+    private ImmutableList<ImmutableList<AlmanacMap>> buildAlmanacMaps(ImmutableList<ImmutableList<String>> groups) {
         ImmutableList.Builder<ImmutableList<AlmanacMap>> almanacMapsBuilder = new ImmutableList.Builder<>();
         for (int i = 1; i < groups.size(); i++) {
             almanacMapsBuilder.add(buildMap(groups.get(i)));
         }
         ImmutableList<ImmutableList<AlmanacMap>> almanacMaps = almanacMapsBuilder.build();
-
-        OptionalLong min = seeds.stream().mapToLong(seed -> findFinalLocation(seed, almanacMaps)).min();
-        return min.getAsLong();
-        // return 0;
+        return almanacMaps;
     }
 
     private Long findFinalLocation(Long seed, ImmutableList<ImmutableList<AlmanacMap>> almanacMaps) {
@@ -82,13 +90,36 @@ public class Day05 implements Day {
 
     @Override
     public void executePartB() {
-        final int result = partB("day05Input.txt");
+        final long result = partB("day05Input.txt");
         System.out.println("Part B answer: " + _textFormatter.format(result, Attribute.GREEN_TEXT()));
 
     }
 
-    int partB(String filename) {
-        return 0;
+    long partB(String filename) {
+
+
+        ImmutableList<ImmutableList<String>> groups = _fileHelper.fileToGroupedStringListTrim(filename);
+        ImmutableList<String> seedsString = groups.getFirst();
+
+        String[] values = seedsString.getFirst().split(":")[1].trim().split(" ");
+        ImmutableList.Builder<Long> seedsBuilder = new ImmutableList.Builder<Long>();
+        long start = Long.parseLong(values[0]);
+        long range = Long.parseLong(values[1]);
+        for (long i = start; i < start + range; i++) {
+            seedsBuilder.add(i);
+        }
+        start = Long.parseLong(values[2]);
+        range = Long.parseLong(values[3]);
+        for (long i = start; i < start + range; i++) {
+            seedsBuilder.add(i);
+        }
+        //    .map(Long::parseLong)
+//  .collect(ImmutableList.toImmutableList());
+        ImmutableList<Long> seeds = seedsBuilder.build();
+        ImmutableList<ImmutableList<AlmanacMap>> almanacMaps = buildAlmanacMaps(groups);
+
+        OptionalLong min = findMinimum(seeds, almanacMaps);
+        return min.getAsLong();
     }
 
     @Override
