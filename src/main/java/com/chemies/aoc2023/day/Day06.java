@@ -60,7 +60,7 @@ public class Day06 implements Day {
         String[] split = firstLine.split(":");
         String values = split[1].trim().replaceAll(" +", " ");
         String[] vals = values.split(" ");
-        ImmutableList.Builder<Integer> numbers = new ImmutableList.Builder<Integer>();
+        ImmutableList.Builder<Integer> numbers = new ImmutableList.Builder<>();
 
         for (String val : vals) {
             numbers.add(Integer.parseInt(val));

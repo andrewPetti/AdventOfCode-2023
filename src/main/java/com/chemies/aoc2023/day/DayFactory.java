@@ -4,43 +4,17 @@ package com.chemies.aoc2023.day;
 public class DayFactory {
 
     public static Day getDay(final int day) {
-        switch (day) {
-            case 1:
-                return new Day01();
-            case 2:
-                return new Day02();
-            case 3:
-                //return new Day03();
-            case 4:
-                return new Day04();
-            case 5:
-                return new Day05();
-            case 6:
-                return new Day06();
-            case 8:
-                //return new Day08();
-            case 7:
-            case 9:
-            case 10:
-            case 11:
-            case 12:
-            case 13:
-            case 14:
-            case 15:
-            case 16:
-            case 17:
-            case 18:
-            case 19:
-            case 20:
-            case 21:
-            case 22:
-            case 23:
-            case 24:
-            case 25:
-                return new UnimplementedDay(day);
-        }
+        return switch (day) {
+            case 1 -> new Day01();
+            case 2 -> new Day02();
+            //return new Day03();
+            case 3, 4 -> new Day04();
+            case 5 -> new Day05();
+            case 6 -> new Day06();
+            case 8, 7, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25 -> new UnimplementedDay(day);
+            default -> new UnimplementedDay(day);
+        };
 
-        return new UnimplementedDay(day);
     }
 }
 
